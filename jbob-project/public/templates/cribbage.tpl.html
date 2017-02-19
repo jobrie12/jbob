@@ -1,0 +1,81 @@
+<div class="row">
+    <div class="col-lg-3">
+        <div class="panel panel-default" data-ng-repeat="player in data.players">
+            <div class="panel-heading">
+                <h3 class="panel-title">Player {{player.index + 1}}
+                    <span class="badge" data-ng-if="dealer==player.index">Dealer</span>
+                    <span class="label label-info" data-ng-if="phase == 'play' && playerTurn%2 == player.index">Your Turn</span>
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h4>Score : {{player.score}}</h4>
+                <div class="btn-group">
+                    <span data-ng-repeat="card in player.hand">
+                        <label class="btn btn-lg {{card.selected?'btn-success':''}}"
+                               data-ng-model="card.selected"
+                               data-ng-disabled="(phase == 'play' && playerTurn%2 !== player.index) || (data.total+card.value) > 31"
+                               uib-btn-checkbox data-ng-click="updateCards(card)" data-ng-bind-html="card.symbol | unsafe"
+                               style="background-color:{{card.color}} !important; padding-bottom: 30px; margin-bottom: 10px; padding-top: 20px;
+                               {{card.face=='Ten'?'padding-left: 7px; padding-right:7px;':'padding-left: 10px; padding-right:10px;'}} color:white;"
+                        ></label>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Control Panel</h3>
+            </div>
+            <div class="panel-body" style="text-align: center">
+                <div class="panel panel-default" data-ng-if="data.crib.length == 4">
+                    <div class="panel-heading">
+                        Crib
+                    </div>
+                    <div class="panel-body">
+                        <div class="btn-group">
+                                <span data-ng-repeat="card in data.crib">
+                                    <label class="btn btn-lg" data-ng-disabled="true" data-ng-bind-html="card.symbol | unsafe"
+                                           style="background-color:{{card.color}} !important; color:white;"></label>
+                                </span>
+                        </div>
+                    </div>
+                </div>
+                <div data-ng-if="data.starter">
+                    Starter Card : {{data.starter.name}}
+                    <br>
+                </div>
+                <div data-ng-if="phase=='start'">
+                    <button class="btn btn-lg btn-success" data-ng-click="dealHands()">Deal Hand</button>
+                </div>
+                <div data-ng-if="phase=='add to crib'" >
+                    Please select two cards to add to player {{dealer+1}}'s crib.
+                    <br>
+                    <button class="btn btn-info btn-lg" data-ng-if="data.crib.length == 4"
+                            data-ng-click="finalizeCrib()">
+                        Continue
+                    </button>
+                </div>
+                <div data-ng-if="phase=='play'">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Play Area
+                        </div>
+                        <div class="panel-body">
+                            <h3>Total : {{data.total}}</h3>
+                            <div class="btn-group">
+                                <span data-ng-repeat="card in data.play">
+                                    <label class="btn btn-lg" data-ng-disabled="true" data-ng-bind-html="card.symbol | unsafe"
+                                           style="background-color:{{card.color}} !important; color:white;"></label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+    </div>
+</div>

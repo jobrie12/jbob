@@ -1,0 +1,109 @@
+<div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Edit Team Name
+            </div>
+            <div class="modal-body" style="overflow-y: auto;">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-addon" id="sizing-addon3">Enter Team Name</span>
+                    <input type="text" class="form-control" data-ng-model="teamData.name">
+                </div>
+                <br><br>
+                <div style="max-height:600px; overflow-y: auto; overflow-x: auto;">
+                    <table class="table table-bordered table-condensed" id="teamBoard" data-ng-show="teamData.roster">
+                        <thead>
+                        <tr>
+                            <th>Role</th>
+                            <th>Drafted</th>
+                            <th>Name</th>
+                            <th>Pos</th>
+                            <th>Team</th>
+                            <th>BYE</th>
+                            <th>Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="player in teamData.roster.QB">
+                            <td>QB</td>
+                            <td>RD {{player.round}}</td>
+                            <td>{{player.name}}</td>
+                            <td>{{player.pos}}</td>
+                            <td>{{player.tm}}</td>
+                            <td>{{player.bw}}</td>
+                            <td>{{player.val}}</td>
+                        </tr>
+                        <tr data-ng-repeat="player in teamData.roster.RB">
+                            <td>RB</td>
+                            <td>RD {{player.round}}</td>
+                            <td>{{player.name}}</td>
+                            <td>{{player.pos}}</td>
+                            <td>{{player.tm}}</td>
+                            <td>{{player.bw}}</td>
+                            <td>{{player.val}}</td>
+                        </tr>
+                        <tr data-ng-repeat="player in teamData.roster.WR">
+                            <td>WR</td>
+                            <td>RD {{player.round}}</td>
+                            <td>{{player.name}}</td>
+                            <td>{{player.pos}}</td>
+                            <td>{{player.tm}}</td>
+                            <td>{{player.bw}}</td>
+                            <td>{{player.val}}</td>
+                        </tr>
+                        <tr data-ng-repeat="player in teamData.roster.TE">
+                            <td>TE</td>
+                            <td>RD {{player.round}}</td>
+                            <td>{{player.name}}</td>
+                            <td>{{player.pos}}</td>
+                            <td>{{player.tm}}</td>
+                            <td>{{player.bw}}</td>
+                            <td>{{player.val}}</td>
+                        </tr>
+                        <tr data-ng-repeat="player in teamData.roster.FLEX">
+                            <td>FLEX</td>
+                            <td>RD {{player.round}}</td>
+                            <td>{{player.name}}</td>
+                            <td>{{player.pos}}</td>
+                            <td>{{player.tm}}</td>
+                            <td>{{player.bw}}</td>
+                            <td>{{player.val}}</td>
+                        </tr>
+                        <tr data-ng-repeat="player in teamData.roster.K">
+                            <td>K</td>
+                            <td>RD {{player.round}}</td>
+                            <td>{{player.name}}</td>
+                            <td>{{player.pos}}</td>
+                            <td>{{player.tm}}</td>
+                            <td>{{player.bw}}</td>
+                            <td>{{player.val}}</td>
+                        </tr>
+                        <tr data-ng-repeat="player in teamData.roster.DST">
+                            <td>DST</td>
+                            <td>RD {{player.round}}</td>
+                            <td>{{player.name}}</td>
+                            <td>{{player.pos}}</td>
+                            <td>{{player.tm}}</td>
+                            <td>{{player.bw}}</td>
+                            <td>{{player.val}}</td>
+                        </tr>
+                        <tr data-ng-repeat="player in teamData.roster.BENCH">
+                            <td>BENCH</td>
+                            <td>RD {{player.round}}</td>
+                            <td>{{player.name}}</td>
+                            <td>{{player.pos}}</td>
+                            <td>{{player.tm}}</td>
+                            <td>{{player.bw}}</td>
+                            <td>{{player.val}}</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" ng-click="$hide()">Save Name</button>
+            </div>
+        </div>
+    </div>
+</div>

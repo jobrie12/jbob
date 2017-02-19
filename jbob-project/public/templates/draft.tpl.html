@@ -1,0 +1,150 @@
+<div class="row">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Draft Control Panel</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row" data-ng-if="!showDraftBoard">
+                    <div class="col-lg-6 col-md-6 col-sm-6" data-ng-if="!config">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon" id="sizing-addon3"># of Teams</span>
+                            <input type="text" class="form-control" data-ng-model="teams.number">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6" data-ng-if="!config">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-addon" id="sizing-addon3"># of Rounds</span>
+                            <input type="text" class="form-control" data-ng-model="rounds.number">
+                        </div>
+                    </div>
+                    <br><br>
+                    <div class="col-lg-4"></div>
+                    <div class="col-lg-4" style="text-align:center;">
+                        <div data-ng-if="configOptions">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{config?config.name:"Load Config"}} <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li data-ng-repeat="config in configOptions"><a data-ng-click="loadConfig(config)">{{config.name}}</a></li>
+                                </ul>
+                                <br><br>
+                            </div>
+                        </div>
+                        <div class="form-control btn btn-success" data-ng-click="createBoard()"> Next Step! </div>
+                    </div>
+                    <div class="col-lg-4"></div>
+                </div>
+                <div data-ng-if="showDraftBoard">
+                    <div style="text-align:center;" data-ng-if="keeperTime">
+                        <h4>{{selPlayer?'Add '+selPlayer.name + ' to ' +selField.name+ ', Round '+ selField.round+'?':selField?'Add Keeper to ' +selField.name+ ', Round '+ selField.round+' :':'To Add Keepers: First, simply select the position in the draft to be taken, and then select the keeper.'}}</h4>
+                        <button class="btn btn-success" data-ng-click="addKeeper()" data-ng-if="selPlayer">Add Keeper</button>
+                    </div>
+                    <br>
+                    <div class="row" data-ng-if="selField">
+                        <div class="col-lg-12">
+                            <div class="well">
+                                <ul class="nav nav-pills">
+                                    <li role="presentation" class="{{filter==fil?'active':'in-active'}}" data-ng-repeat="fil in filters" data-ng-click="setFilter(fil)"><a href="#">{{fil}}</a></li>
+                                </ul>
+                                <div style="max-height:220px; overflow-y: auto; overflow-x: auto;">
+                                    <table class="table table-bordered table-condensed" id="playerBoard">
+                                        <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Pos</th>
+                                            <th>Team</th>
+                                            <th>BYE</th>
+                                            <th>Value</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr style="cursor: pointer; background-color: {{selPlayer==player?'#139bff':''}}" data-ng-click="selectPlayer(player)" data-ng-repeat="player in players" data-ng-show="player.available && (filter == 'All' || filter == player.pos)">
+                                            <td>{{player.name}}</td>
+                                            <td>{{player.pos}}</td>
+                                            <td>{{player.tm}}</td>
+                                            <td>{{player.bw}}</td>
+                                            <td>{{player.val}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: center;" data-ng-if="draftTime">
+                        <h4>{{selPlayer?'Add '+selPlayer.name + ' for ' +selField.name+ '?':'On the Clock:' +selField.name+ ', Round '+ selField.round}}</h4>
+                        <button class="btn btn-success" data-ng-click="draftPlayer()" data-ng-if="selPlayer">Add Player</button>
+                        <button class="btn btn-success" data-ng-click="recPick()" data-ng-if="!selPlayer">Recommend Pick</button>
+                        <button class="btn btn-primary" data-ng-click="simPick()" data-ng-if="!selPlayer">Sim Pick</button>
+                        <br>
+                        <!--<br>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3"></div>
+                            <div class="col-lg-6 col-md-6">
+                                <span class="input-group-addon" id="sizing-addon3">Add Player by Name</span>
+                                <input type="text" class="form-control" data-ng-model="manName">
+                                <div data-ng-if="manName">
+                                    <br>
+                                    <button class="btn btn-success" data-ng-click="submitMan()" data-ng-if="manName">Submit Manual Player</button>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3"></div>
+                        </div>-->
+
+                        <br>
+                    </div>
+                    <div style="text-align:center;" data-ng-if="draftTime">
+                    </div>
+                    <div style="text-align:center;" data-ng-if="keeperTime">
+                        <button class="btn btn-lg btn-success" data-ng-click="startDraft()"> START DRAFT </button>
+                        <br>
+                    </div>
+                    <div style="text-align: center;">
+                        <br>
+                        <button class="btn btn-lg btn-primary" data-ng-click="simDraft()" data-ng-if="!draftOver"> SIMULATE DRAFT </button>
+                    </div>
+                    <div style="text-align: center;" data-ng-if="draftOver">
+                        <h3> DRAFT OVER!</h3>
+                        <button class="btn btn-lg btn-warning" data-ng-click="resetDraft()"> Reset Draft? </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+<div class="row" data-ng-if="showDraftBoard">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-10">
+        <div data-ng-if="showDraftBoard">
+            <div class="well well-lg">
+                <div style="max-height:720px; overflow-y: auto; overflow-x: auto;">
+                    <table class="table table-bordered table-striped table-condensed" id="draftBoard">
+                        <thead>
+                        <tr>
+                            <th style="text-align: center;">Round</th>
+                            <th style="text-align: center;" data-ng-repeat="team in teams.teams">{{team.name}} <button style="padding: 0px;" class="btn btn-sm btn-warning pull-right" data-ng-click="changeName(team)"><i class="glyphicon glyphicon-pencil" ></i></button></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="round in rounds.rounds">
+                            <td style="text-align: center;">
+                                <b>{{round.number}}</b>
+                            </td>
+                            <td style="text-align: center; background-color:{{round.picks[team.number]?colorScale[round.picks[team.number].pos]:''}};" data-ng-repeat="team in teams.teams">
+                                <a style="cursor: pointer;" data-ng-click="selectField(round,team)" data-ng-if="!round.picks[team.number] && round.number%2!=0">{{round.number}}.{{team.number}}</a>
+                                <a style="cursor: pointer;" data-ng-click="selectField(round,team)" data-ng-if="!round.picks[team.number] && round.number%2==0">{{round.number}}.{{teams.number - (team.number-1)}}</a>
+                                <div data-ng-click="selectField(round,team)" data-ng-if="round.picks[team.number]">{{round.picks[team.number].name}}</div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-1"></div>
+</div>

@@ -1,0 +1,150 @@
+<div class="row">
+    <div class="col-lg-3">
+        <div style="text-align: center">
+            <h3>Win Pay Table</h3>
+            <table class="table table-bordered table-condensed" id="winTable">
+                <thead>
+                <tr>
+                    <th>Correct Guesses</th>
+                    <th>Payout</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-if="phase == 'New Game'" data-ng-repeat="win in wins">
+                    <td>{{win.point}}</td>
+                    <td>{{win.win}}</td>
+                </tr>
+                <tr data-ng-if="phase != 'New Game'" data-ng-repeat="win in wins">
+                    <td>{{win.point}}</td>
+                    <td>{{win.val * bet.wager | number:2}}E</td>
+                </tr>
+                </tbody>
+            </table>
+            <h3>Tie Bet Pay Table</h3>
+            <table class="table table-bordered table-condensed" id="tieTable">
+                <thead>
+                <tr>
+                    <th>Decision Point</th>
+                    <th>2 - King Tie</th>
+                    <th>Ace Tie</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-if="phase == 'New Game'" data-ng-repeat="tie in ties">
+                    <td>{{tie.point}}</td>
+                    <td>{{tie.twoKPay}} to 1</td>
+                    <td>{{tie.acePay}} to 1</td>
+                </tr>
+                <tr data-ng-if="phase != 'New Game'" data-ng-repeat="tie in ties">
+                    <td>{{tie.point}}</td>
+                    <td>{{tie.twoKPay * bet.tie | number:2}}E</td>
+                    <td>{{tie.acePay * bet.tie | number:2}}E</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Card Sharks {{correct?'-- Correct Guesses:'+correct:''}}</h3>
+            </div>
+            <div class="panel-body" style="text-align: center">
+                <div data-ng-show="phase == 'New Game'">
+                    <h3>Select the number of decks you would like to use:</h3>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{deckSize}} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li data-ng-repeat="size in deckSizes"><a data-ng-click="setDeckSize(size)">{{size}}</a></li>
+                        </ul>
+                        <br><br>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon" id="sizing-addon3">Wager (MAX 1.5):</span>
+                                <input type="text" class="form-control" data-ng-model="bet.wager">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon" id="sizing-addon3">
+                                    <span data-toggle="tooltip" data-placement="top"
+                                          title="If you lose on a tie, win the payout amount shown in the Tie Bet Pay Table. If you win or lose any other way, the tie bet is lost.">
+                                        <span class="glyphicon glyphicon-question-sign"></span>
+                                    </span>
+                                    Tie Bet (optional) (MAX 0.5):
+                                </span>
+                                <input type="text" class="form-control" data-ng-model="bet.tie">
+                            </div>
+                        </div>
+                    </div>
+                    <br><br>
+                    <div class="form-control btn btn-success" data-ng-click="startGame();" data-ng-show="bet.wager >= 0 && bet.wager <= 1.5 && bet.tie >= 0 && bet.tie <= .5"> Play Card Sharks! </div>
+                </div>
+                <div data-ng-show="phase == 'Start Game'">
+                    <h3>The cards have been shuffled...</h3>
+                    <h4>You have {{deckSize}} decks with a wager of {{bet.wager}} ether and a tie bet of {{bet.tie}} ether.</h4>
+                    <h5>The tables on your left have been updated with the correct payout amounts for your bets. Good luck!</h5>
+                    <button class="btn btn-lg btn-primary" data-ng-click="playGame()">Deal First Card!</button>
+                </div>
+                <div data-ng-show="phase == 'Play or Switch'">
+                    <h3 data-ng-if="message">{{message}}</h3>
+                    <h4>You have been dealt the {{card.name}}. Play this card or Switch it out for the next card on the deck?</h4>
+                        <span>
+                                <label data-ng-if="prevCard" class="btn btn-lg" data-ng-disabled="true" data-ng-bind-html="prevCard.symbol | unsafe"
+                                       style="background-color:{{prevCard.color}} !important; padding-bottom: 30px; margin-bottom: 10px; padding-top: 20px;
+                               {{prevCard.face=='Ten'?'padding-left: 7px; padding-right:7px;':'padding-left: 10px; padding-right:10px;'}} color:white;"></label>
+                                    <label class="btn btn-lg" data-ng-disabled="true" data-ng-bind-html="card.symbol | unsafe"
+                                           style="background-color:{{card.color}} !important; padding-bottom: 30px; margin-bottom: 10px; padding-top: 20px;
+                               {{card.face=='Ten'?'padding-left: 7px; padding-right:7px;':'padding-left: 10px; padding-right:10px;'}} color:white;"></label>
+                                </span>
+                    <br>
+                    <button class="btn btn-lg btn-success" data-ng-click="playGame(true)">Play</button>
+                    <button class="btn btn-lg btn-warning" data-ng-click="switch()">Switch</button>
+                </div>
+                <div data-ng-show="phase == 'Play Game'">
+                    <div>
+                        <h3 data-ng-if="message">{{message}}</h3>
+                        <h4>You were dealt the {{card.name}}</h4>
+                            <span>
+                                    <label data-ng-if="prevCard" class="btn btn-lg" data-ng-disabled="true" data-ng-bind-html="prevCard.symbol | unsafe"
+                                           style="background-color:{{prevCard.color}} !important; padding-bottom: 30px; margin-bottom: 10px; padding-top: 20px;
+                               {{prevCard.face=='Ten'?'padding-left: 7px; padding-right:7px;':'padding-left: 10px; padding-right:10px;'}} color:white;"></label>
+                                    <label class="btn btn-lg" data-ng-disabled="true" data-ng-bind-html="card.symbol | unsafe"
+                                           style="background-color:{{card.color}} !important; padding-bottom: 30px; margin-bottom: 10px; padding-top: 20px;
+                               {{card.face=='Ten'?'padding-left: 7px; padding-right:7px;':'padding-left: 10px; padding-right:10px;'}} color:white;"></label>
+                            </span>
+                        <div data-ng-if="!gameOver">
+                            <h4>Higher or Lower than the {{card.face}}?</h4>
+                            <div class="row">
+                                <button class="btn btn-lg btn-success" data-ng-click="reveal(true)"><span class="glyphicon glyphicon-arrow-up"></span></button>
+                            </div>
+                            <div class="row">
+                                <button class="btn btn-lg btn-danger" data-ng-click="reveal(false)"><span class="glyphicon glyphicon-arrow-down"></span></button>
+                            </div>
+                        </div>
+                        <div data-ng-if="gameOver">
+                            <h3> Play Again? </h3>
+                            <button class="btn btn-lg btn-default" data-ng-click="newGame()">New Game</button>
+                        </div>
+
+                        <!--<span data-ng-repeat="card in deck">
+                            <label class="btn btn-lg {{card.selected?'btn-success':''}}"
+                            data-ng-model="card.selected" data-ng-bind-html="card.symbol | unsafe"
+                           style="background-color:{{card.color}} !important; padding-bottom: 30px; margin-bottom: 10px; padding-top: 20px;
+                           {{card.face=='Ten'?'padding-left: 7px; padding-right:7px;':'padding-left: 10px; padding-right:10px;'}} color:white;"
+                            ></label>
+                        </span>-->
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+    </div>
+</div>

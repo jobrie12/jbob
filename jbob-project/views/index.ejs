@@ -1,0 +1,88 @@
+<html ng-app="FantasyFootballTools">
+<head>
+    <title>Bryant O'Brien's Personal Projects</title>
+    <style>
+        body { padding-top: 40px; }
+
+        .modal-backdrop.am-fade {
+            opacity: .5;
+            transition: opacity .15s linear;
+        &.ng-enter {
+             opacity: 0;
+        &.ng-enter-active {
+             opacity: .5;
+         }
+        }
+        &.ng-leave {
+             opacity: .5;
+        &.ng-leave-active {
+             opacity: 0;
+         }
+        }
+        }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+    <link href="/stylesheets/bootstrap-theme.min.css" rel="stylesheet"/>
+    <link REL="SHORTCUT ICON" HREF="/images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Bryant's Workshop</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-controller="NavCtrl">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a ui-sref="draft" ui-sref-active="active">Draft Tool</a>
+                </li>
+                <li>
+                    <a ui-sref="cribbage" ui-sref-active="active">Cribbage</a>
+                </li>
+                <li>
+                    <a ui-sref="cardsharks" ui-sref-active="active">Card Sharks</a>
+                </li>
+                <li>
+                    <a ui-sref="postsHome" ui-sref-active="active">Posts</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                <li ng-show="isLoggedIn()"><a>{{ currentUser() }}</a></li>
+                <li ng-show="isLoggedIn()"><a href="" ng-click="logOut()">Log Out</a></li>
+                <li ng-hide="isLoggedIn()"><a href="/#/login">Log In</a></li>
+                <li ng-hide="isLoggedIn()"><a href="/#/register">Register</a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+
+    </div>
+    <!-- /.container -->
+</nav>
+<br>
+<br>
+<div class="container-fluid">
+    <ui-view></ui-view>
+
+</div>
+
+<script src="/javascripts/lib/jquery-2.1.4.min.js"></script>
+<script src="/javascripts/lib/angular.min.js"></script>
+<script src="/javascripts/lib/angular-ui-router.js"></script>
+<script src="/javascripts/lib/angular-animate.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/2.1.2/angular-strap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/2.1.2/angular-strap.tpl.min.js"></script>
+<script src="/javascripts/lib/bootstrap.min.js"></script>
+<script src="/javascripts/lib/sugar.min.js"></script>
+<script src="/javascripts/angularApp.js"></script>
+</body>
+</html>
